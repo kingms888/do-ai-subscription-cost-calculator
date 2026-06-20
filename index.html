@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+  <title>AI subscription + API cost calculator · Etsy seller tools</title>
+  <meta name="description" content="Compare ChatGPT, Claude, OpenRouter 300+ models. Monthly subscription & token cost calculator for Etsy sellers, developers, Shopify profit. Free frontend tool.">
+  <meta name="keywords" content="ai cost calculator, etsy seo checker, csv to shopify, json validator, shopify profit calculator, etsy sellers, developer tools, csv/json tools, shopify sellers, amazon sellers">
+  <link rel="canonical" href="https://aicosts.example.com">
+  <!-- Open Graph -->
+  <meta property="og:title" content="AI subscription cost calculator · Etsy seller toolkit">
+  <meta property="og:description" content="Compare ChatGPT, Claude, OpenRouter 300+ models. Monthly subscription & token cost estimator.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://aicosts.example.com">
+  <meta name="twitter:card" content="summary_large_image">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: #f6f8fc;
+      color: #1e293b;
+      padding: 1rem;
+      line-height: 1.5;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      background: linear-gradient(145deg, #0f2b3d, #1e4a6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.02em;
+    }
+    .badge {
+      background: #e2e8f0;
+      padding: 0.25rem 0.8rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      color: #1e293b;
+    }
+    .tool-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    @media (min-width: 700px) {
+      .tool-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .wide-card {
+        grid-column: 1 / -1;
+      }
+    }
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.02), 0 2px 6px rgba(0,20,40,0.05);
+      transition: box-shadow 0.15s;
+      border: 1px solid #eef2f6;
+    }
+    .card h2 {
+      font-size: 1.3rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card h2 small {
+      font-weight: 400;
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+    label {
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: block;
+      margin-top: 0.8rem;
+      margin-bottom: 0.2rem;
+      color: #334155;
+    }
+    select, input {
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      border: 1px solid #d1d9e6;
+      border-radius: 40px;
+      font-size: 1rem;
+      background: white;
+      transition: 0.2s;
+    }
+    select:focus, input:focus {
+      border-color: #3b82f6;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+    }
+    .input-group {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .input-group input {
+      flex: 2;
+      min-width: 100px;
+    }
+    .input-group span {
+      background: #eef2f6;
+      padding: 0.3rem 1rem;
+      border-radius: 40px;
+      font-size: 0.9rem;
+    }
+    .result-box {
+      background: #f1f5f9;
+      padding: 0.8rem 1rem;
+      border-radius: 40px;
+      margin-top: 0.8rem;
+      font-weight: 500;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .result-box .label {
+      font-weight: 400;
+      color: #475569;
+    }
+    .result-box .value {
+      font-weight: 600;
+    }
+    .divider {
+      margin: 1.2rem 0;
+      border: 0;
+      height: 1px;
+      background: #e2e8f0;
+    }
+    .btn {
+      background: #1e293b;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.5rem;
+      border-radius: 40px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.15s;
+      font-size: 0.95rem;
+    }
+    .btn:hover {
+      background: #0f172a;
+    }
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #1e293b;
+    }
+    .btn-secondary:hover {
+      background: #cbd5e1;
+    }
+    .flex-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      align-items: center;
+      margin-top: 0.5rem;
+    }
+    .affiliate-note {
+      background: #fef9e7;
+      border-left: 4px solid #fbbf24;
+      padding: 0.8rem 1rem;
+      border-radius: 16px;
+      font-size: 0.9rem;
+      margin: 1rem 0;
+    }
+    .ad-placeholder {
+      background: #f1f4f9;
+      border-radius: 20px;
+      padding: 1.2rem;
+      text-align: center;
+      color: #64748b;
+      border: 1px dashed #cbd5e1;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+    .privacy-note {
+      background: #eef2f6;
+      padding: 0.6rem 1rem;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      color: #475569;
+      text-align: center;
+      margin-top: 2rem;
+    }
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem 1.5rem;
+      margin: 1rem 0 0.5rem;
+      font-size: 0.85rem;
+    }
+    .footer-links a {
+      color: #2563eb;
+      text-decoration: none;
+    }
+    .inline-icon {
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+    .model-select-group {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .model-select-group select {
+      flex: 3;
+      min-width: 140px;
+    }
+    .chip {
+      background: #e2e8f0;
+      padding: 0.2rem 0.8rem;
+      border-radius: 40px;
+      font-size: 0.75rem;
+    }
+    @media (max-width: 480px) {
+      h1 { font-size: 1.5rem; }
+      .card { padding: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>🤖 AI cost · sub + API</h1>
+    <span class="badge">Etsy seller toolkit</span>
+  </header>
+
+  <!-- main tool grid -->
+  <div class="tool-grid">
+
+    <!-- LEFT: Subscription + hybrid calculator -->
+    <div class="card wide-card">
+      <h2>📊 Subscription & API hybrid <small>ChatGPT · Claude · OpenRouter</small></h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+        <!-- monthly subscription block -->
+        <div style="flex: 1; min-width: 200px;">
+          <label for="subSelect">Monthly subscription</label>
+          <select id="subSelect">
+            <option value="0">None (pay-as-you-go)</option>
+            <option value="20" selected>ChatGPT Plus — $20/mo</option>
+            <option value="25">Claude Pro — $25/mo</option>
+            <option value="30">ChatGPT Team — $30/mo</option>
+            <option value="100">Claude Enterprise — $100/mo</option>
+          </select>
+          <div class="result-box" style="margin-top: 0.5rem;">
+            <span class="label">Subscription</span>
+            <span class="value" id="subDisplay">$20.00</span>
+          </div>
+        </div>
+
+        <!-- OpenRouter model selector + token usage -->
+        <div style="flex: 2; min-width: 260px;">
+          <label for="modelSelect">OpenRouter model (300+ supported)</label>
+          <div class="model-select-group">
+            <select id="modelSelect">
+              <option value="0.002" data-context="8000">gpt-3.5-turbo (cheap)</option>
+              <option value="0.01" data-context="16000" selected>gpt-4o-mini (fast)</option>
+              <option value="0.03" data-context="32000">gpt-4o (balanced)</option>
+              <option value="0.15" data-context="64000">claude-3-opus (high quality)</option>
+              <option value="0.08" data-context="32000">claude-3-sonnet</option>
+              <option value="0.003" data-context="8000">mistral-small</option>
+              <option value="0.02" data-context="16000">llama-3-70b</option>
+            </select>
+            <span class="chip" id="contextChip">16k context</span>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem;">
+            <div style="flex:1; min-width:80px;">
+              <label>Input tokens (monthly)</label>
+              <input type="number" id="inputTokens" value="500000" step="100000" min="0">
+            </div>
+            <div style="flex:1; min-width:80px;">
+              <label>Output tokens</label>
+              <input type="number" id="outputTokens" value="200000" step="50000" min="0">
+            </div>
+          </div>
+
+          <div class="flex-row">
+            <button class="btn" id="calcHybridBtn">⟳ Recalculate</button>
+            <span style="font-size:0.85rem; color:#475569;">API cost /mo</span>
+            <span style="font-weight:600; background:#e2e8f0; padding:0.2rem 1rem; border-radius:40px;" id="apiCostDisplay">$9.00</span>
+          </div>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- combined total -->
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;">
+        <div><strong>💳 Total monthly (subscription + API tokens)</strong></div>
+        <div style="font-size: 1.8rem; font-weight: 700; color: #0f172a;" id="totalHybridCost">$29.00</div>
+      </div>
+      <div style="font-size:0.8rem; color:#64748b; margin-top: 0.3rem;">
+        * API cost = (input tokens × $price/1k) + (output tokens × $price×2.5). Output weighted 2.5x typical.
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: extra tools (etsy, csv, json, shopify) + affiliate -->
+    <div class="card">
+      <h2>🧰 Etsy & developer tools</h2>
+      <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+        <div><span class="inline-icon">🔍</span> <strong>Etsy SEO checker</strong> — <span style="color:#2563eb;">keyword density & tags</span> <span class="chip">coming</span></div>
+        <div><span class="inline-icon">📁</span> <strong>CSV to Shopify</strong> — <span style="color:#2563eb;">bulk product mapper</span> <span class="chip">beta</span></div>
+        <div><span class="inline-icon">✓</span> <strong>JSON validator</strong> — paste & validate</div>
+        <div><span class="inline-icon">💰</span> <strong>Shopify profit calculator</strong> — fees & margin</div>
+        <div class="affiliate-note" style="margin-top:0.2rem;">
+          🔗 <strong>Affiliate corner</strong> — Try <a href="#" style="text-decoration:underline;">OpenRouter</a> · 
+          <a href="#" style="text-decoration:underline;">ChatGPT Plus</a> · 
+          <a href="#" style="text-decoration:underline;">Claude Pro</a> (referral links)
+        </div>
+      </div>
+    </div>
+
+    <!-- AD placeholder (visible) -->
+    <div class="card" style="background:#fafcff;">
+      <div class="ad-placeholder">
+        <span style="font-weight:500;">📢 AD PLACEHOLDER</span><br>
+        <span style="font-size:0.8rem;">AI tools for Etsy sellers — Your brand here (300x250)</span>
+      </div>
+    </div>
+
+    <!-- Quick JSON validator (light) -->
+    <div class="card">
+      <h2>🧪 JSON validator</h2>
+      <textarea id="jsonInput" rows="3" style="width:100%; border-radius:16px; border:1px solid #d1d9e6; padding:0.6rem; font-family:monospace;" placeholder='{"valid": true}'>{"shopify":"profit","etsy":"seo"}</textarea>
+      <div class="flex-row">
+        <button class="btn btn-secondary" id="validateJsonBtn">Validate</button>
+        <span id="jsonValidationResult" style="font-weight:500;">✅ valid JSON</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- privacy note + event reporting -->
+  <div class="privacy-note">
+    🔒 Privacy: events may be counted anonymously for product improvement. 
+    No credentials collected. <span style="opacity:0.7;">reportEvent() used if endpoint configured.</span>
+  </div>
+  <div class="footer-links">
+    <a href="#">AI pricing calculator</a>
+    <a href="#">LLM cost estimator</a>
+    <a href="#">ChatGPT vs Claude cost</a>
+    <a href="#">OpenRouter 300+ models</a>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ---------- event reporting (safe) ----------
+    window.reportEvent = function(name, payload) {
+      if (typeof window.ORGANISM_METRICS_ENDPOINT === 'string' && window.ORGANISM_METRICS_ENDPOINT.length > 0) {
+        try {
+          const body = JSON.stringify({ event: name, payload: payload || {}, timestamp: Date.now() });
+          fetch(window.ORGANISM_METRICS_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: body,
+            mode: 'no-cors' // anonymous, no credential
+          }).catch(() => {}); // silently ignore
+        } catch (e) { /* ignore */ }
+      }
+    };
+
+    // ---------- DOM refs ----------
+    const subSelect = document.getElementById('subSelect');
+    const subDisplay = document.getElementById('subDisplay');
+    const modelSelect = document.getElementById('modelSelect');
+    const contextChip = document.getElementById('contextChip');
+    const inputTokens = document.getElementById('inputTokens');
+    const outputTokens = document.getElementById('outputTokens');
+    const apiCostDisplay = document.getElementById('apiCostDisplay');
+    const totalHybridCost = document.getElementById('totalHybridCost');
+    const calcBtn = document.getElementById('calcHybridBtn');
+
+    const jsonInput = document.getElementById('jsonInput');
+    const validateBtn = document.getElementById('validateJsonBtn');
+    const jsonResult = document.getElementById('jsonValidationResult');
+
+    // ---------- helper: compute hybrid ----------
+    function computeHybrid() {
+      // subscription
+      const subVal = parseFloat(subSelect.value) || 0;
+      subDisplay.textContent = `$${subVal.toFixed(2)}`;
+
+      // model price per 1k input
+      const pricePer1k = parseFloat(modelSelect.value) || 0;
+      const contextSize = parseInt(modelSelect.options[modelSelect.selectedIndex]?.dataset?.context) || 8000;
+      contextChip.textContent = `${contextSize.toLocaleString()} context`;
+
+      const inp = parseInt(inputTokens.value) || 0;
+      const out = parseInt(outputTokens.value) || 0;
+
+      // realistic pricing: output ~2.5x input cost (common heuristic)
+      const inputCost = (inp / 1000) * pricePer1k;
+      const outputCost = (out / 1000) * pricePer1k * 2.5;
+      const apiTotal = inputCost + outputCost;
+      const displayApi = apiTotal.toFixed(2);
+      apiCostDisplay.textContent = `$${displayApi}`;
+
+      const total = subVal + apiTotal;
+      totalHybridCost.textContent = `$${total.toFixed(2)}`;
+
+      // report event (anonymous)
+      window.reportEvent('hybrid_calc', {
+        subscription: subVal,
+        modelPrice: pricePer1k,
+        inputTokens: inp,
+        outputTokens: out,
+        total: total
+      });
+    }
+
+    // ---------- bind UI ----------
+    function refreshFromInputs() {
+      computeHybrid();
+    }
+
+    // initial calculation
+    refreshFromInputs();
+
+    // event listeners
+    subSelect.addEventListener('change', refreshFromInputs);
+    modelSelect.addEventListener('change', refreshFromInputs);
+    inputTokens.addEventListener('input', refreshFromInputs);
+    outputTokens.addEventListener('input', refreshFromInputs);
+    calcBtn.addEventListener('click', refreshFromInputs);
+
+    // JSON validator
+    validateBtn.addEventListener('click', function() {
+      const val = jsonInput.value.trim();
+      if (!val) {
+        jsonResult.textContent = '⚠️ empty input';
+        jsonResult.style.color = '#b45309';
+        window.reportEvent('json_validate', { valid: false, reason: 'empty' });
+        return;
+      }
+      try {
+        JSON.parse(val);
+        jsonResult.textContent = '✅ valid JSON';
+        jsonResult.style.color = '#15803d';
+        window.reportEvent('json_validate', { valid: true });
+      } catch (e) {
+        jsonResult.textContent = `❌ invalid JSON: ${e.message}`;
+        jsonResult.style.color = '#b91c1c';
+        window.reportEvent('json_validate', { valid: false, error: e.message });
+      }
+    });
+
+    // initial JSON validate (on load)
+    (function() {
+      try {
+        JSON.parse(jsonInput.value.trim());
+        jsonResult.textContent = '✅ valid JSON';
+        jsonResult.style.color = '#15803d';
+      } catch (e) {
+        jsonResult.textContent = '❌ invalid JSON';
+        jsonResult.style.color = '#b91c1c';
+      }
+    })();
+
+    // extra: report page view
+    window.reportEvent('page_view', { tool: 'AI subscription cost calculator', niche: 'etsy sellers' });
+
+    // affiliate placeholder click (demo)
+    document.querySelectorAll('.affiliate-note a').forEach(link => {
+      link.addEventListener('click', function(e) {
+        window.reportEvent('affiliate_click', { url: this.textContent.trim() });
+        // no preventDefault – real links can be added later
+      });
+    });
+
+    // ad placeholder click
+    document.querySelector('.ad-placeholder')?.addEventListener('click', function() {
+      window.reportEvent('ad_placeholder_click', { zone: 'main' });
+    });
+
+    // also recalc on any change to subscription/model (already)
+    // ensure subDisplay updates
+    // final
+  })();
+</script>
+
+<!-- optional: set endpoint example (commented) -->
+<!-- <script>window.ORGANISM_METRICS_ENDPOINT = 'https://metrics.example.com/collect';</script> -->
+
+
+<section data-organism-discovery="hub" style="margin:32px auto 20px;max-width:1040px;padding:16px;border-top:1px solid #d9e2ec;color:#475569;font:14px/1.5 system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+  <strong style="display:block;color:#0f172a;margin-bottom:6px">More free browser tools</strong>
+  <p style="margin:0 0 8px">This page is part of an autonomous micro-tool network. Explore the live tool directory and related utilities.</p>
+  <p style="margin:0"><a href="https://kingms888.github.io/do-digital-organism-index/" style="color:#0f766e;font-weight:700">Open the tool directory</a> </p>
+</section>
+</body>
+</html>
